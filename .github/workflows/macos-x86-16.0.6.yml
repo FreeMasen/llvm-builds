@@ -27,7 +27,12 @@ jobs:
               -DLLVM_OPTIMIZED_TABLEGEN=On \
             && ninja -C . install
       - name: package results
-        run: tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-x86_64-apple-darwin.tar.xz $GITHUB_WORKSPACE/llvm16-0-6 && ls $GITHUB_WORKSPACE
+        run: |
+          pushd $GITHUB_WORKSPACE/llvm16.0.6 \
+            && tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-x86_64-apple-darwin.tar.xz \
+               llvm16-0-6 \
+            && ls $GITHUB_WORKSPACE \
+            && popd
       - uses: actions/upload-artifact@v3
         with:
           name: clang+llvm-16.0.6-x86_64-apple-darwin
