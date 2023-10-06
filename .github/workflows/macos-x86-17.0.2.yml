@@ -1,4 +1,4 @@
-name: build-llvm-macos
+name: build-llvm-17.0.2-darwin-x86
 on:
   workflow_dispatch:
     branches: [ main ]
