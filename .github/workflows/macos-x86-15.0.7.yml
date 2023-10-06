@@ -2,8 +2,6 @@ name: build-llvm-macos
 on:
   workflow_dispatch:
     branches: [ main ]
-  push:
-    branches: [ main ]
 jobs:
   build-16-0-6-macos:
     runs-on: macos-11
@@ -12,16 +10,16 @@ jobs:
       - name: setup build deps
         run: brew install ninja
       - name: checkout llvm
-        run: git clone --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
+        run: git clone --depth 1 --branch llvmorg-15.0.7 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
       - name: setup build
         run: |
           mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
             && cd $GITHUB_WORKSPACE/llvm-project/build \
-            && git checkout llvmorg-16.0.6 \
+            && git checkout llvmorg-15.0.7 \
             && cmake -G "Ninja" -S ../llvm \
               -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm16-0-6" \
               -DCMAKE_BUILD_TYPE="Release" \
-              -DLLVM_TARGETS_TO_BUILD="AArch64" \
+              -DLLVM_TARGETS_TO_BUILD="X86" \
               -DLLVM_ENABLE_ASSERTIONS=ON \
               -DLLVM_ENABLE_PROJECTS="clang;" \
               -DLLVM_INCLUDE_TESTS=Off \
@@ -29,8 +27,8 @@ jobs:
               -DLLVM_OPTIMIZED_TABLEGEN=On \
             && ninja -C . install
       - name: package results
-        run: tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-aarch64-apple-darwin.tar.xz $GITHUB_WORKSPACE/llvm16-0-6 && ls $GITHUB_WORKSPACE
+        run: tar -cJf $GITHUB_WORKSPACE/clang+llvm-15.0.7-x86_64-apple-darwin.tar.xz $GITHUB_WORKSPACE/llvm16-0-6 && ls $GITHUB_WORKSPACE
       - uses: actions/upload-artifact@v3
         with:
-          name: clang+llvm-16.0.6-aarch64-apple-darwin
+          name: clang+llvm-15.0.7-x86_64-apple-darwin
           path: ${{ github.workspace }}/**/*.tar.xz
