@@ -2,7 +2,7 @@ name: build-llvm-16.0.6-linux-x86
 on:
   workflow_dispatch:
 jobs:
-  build-16-0-6-macos:
+  build-16-0-6:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
