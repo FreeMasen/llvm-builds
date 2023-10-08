@@ -1,15 +1,18 @@
-# Not this probably will not work because non-enterprise github runners don't offer apple silicon
-name: build-llvm-16.0.6-darwin-aarch
+name: build-llvm-16.0.6-linux-x86
 on:
   workflow_dispatch:
     branches: [ main ]
 jobs:
   build-16-0-6-macos:
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup build deps
-        run: brew install ninja
+        run: |
+          sudo wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip \
+          && sudo gunzip /usr/local/bin/ninja.gz \
+          && sudo chmod a+x /usr/local/bin/ninja \
+          && sudo apt-get install build-essential make cmake
       - name: checkout llvm
         run: git clone --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
       - name: setup build
@@ -29,12 +32,12 @@ jobs:
             && ninja -C . install
       - name: package results
         run: |
-          pushd $GITHUB_WORKSPACE/llvm16.0.6 \
-            && tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-x86_64-apple-darwin.tar.xz \
-               llvm16-0-6 \
+          pushd $GITHUB_WORKSPACE/llvm16-0-6 \
+            && tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-x86_64-linux.tar.xz \
+               . \
             && ls $GITHUB_WORKSPACE \
             && popd
       - uses: actions/upload-artifact@v3
         with:
-          name: clang+llvm-16.0.6-x86_64-apple-darwin
+          name: clang+llvm-16.0.6-x86_64-linux
           path: ${{ github.workspace }}/**/*.tar.xz
