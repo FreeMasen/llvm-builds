@@ -1,0 +1,37 @@
+name: build-llvm-16.0.6-windows-x86
+on:
+  workflow_dispatch:
+jobs:
+  build-16-0-6:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup build deps
+        run: |
+          choco install -y cmake python3
+          RefreshEnv.cmd
+          cd C:\
+          regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\msdia140.dll"
+          regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\amd64\msdia140.dll"
+          pip install psutil
+          
+      - name: checkout llvm
+        run: git clone --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project C:\llvm
+      - name: setup build
+        run: |
+          mkdir -p C:\llvm\build
+          cd C:\llvm\build
+          git checkout llvmorg-16.0.6
+          cmake -B build -S ..\llvm -DCMAKE_INSTALL_PREFIX="C:\llvm16-0-6" -DCMAKE_BUILD_TYPE="Release" -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;" -DLLVM_INCLUDE_TESTS=Off -DLLVM_INCLUDE_EXAMPLES=Off -Thost=x64
+          make install
+      # - name: package results
+      #   run: |
+      #     pushd C:\llvm16-0-6 \
+      #       && tar -cJf $GITHUB_WORKSPACE/LLVM-16.0.6-win64.exe  \
+      #          . \
+      #       && ls $GITHUB_WORKSPACE \
+      #       && popd
+      - uses: actions/upload-artifact@v3
+        with:
+          name: clang+llvm-16.0.6-x86_64-linux
+          path: C:\llvm16-0-6\**\*.exe
