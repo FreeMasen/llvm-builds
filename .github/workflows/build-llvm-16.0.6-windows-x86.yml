@@ -31,8 +31,7 @@ jobs:
           git checkout llvmorg-16.0.6
           cmake -B . -S ..\llvm -DCMAKE_INSTALL_PREFIX="C:\llvm16-0-6" -DCMAKE_BUILD_TYPE="Release" -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;" -DLLVM_INCLUDE_TESTS=Off -DLLVM_INCLUDE_EXAMPLES=Off -Thost=x64
           ls .
-          ls C:\llvm16-0-6
-          msbuild llvm.sln /t:build /fl /flp:logfile=MyProjectOutput.log;verbosity=diagnostic
+          msbuild LLVM.sln /t:build /fl /flp:logfile=MyProjectOutput.log;verbosity=diagnostic
       - uses: actions/upload-artifact@v3
         with:
           name: clang+llvm-16.0.6-x86_64-linux
