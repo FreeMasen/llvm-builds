@@ -22,7 +22,7 @@ jobs:
           path: C:\llvm
           key: ${{ runner.os }}-llvm
       - name: checkout llvm
-        run: git clone --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project C:\llvm
+        run: git clone --single-branch --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project C:\llvm
         if: steps.cache-llvm.outputs.cache-hit != 'true'
           
       - name: setup build

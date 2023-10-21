@@ -10,7 +10,7 @@ jobs:
       - name: setup build deps
         run: brew install ninja
       - name: checkout llvm
-        run: git clone --depth 1 --branch llvmorg-17.0.2 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
+        run: git clone --single-branch --depth 1 --branch llvmorg-17.0.2 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
       - name: setup build
         run: |
           mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
