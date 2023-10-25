@@ -40,4 +40,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: clang+llvm-16.0.6-x86_64-windows
-          path: '${{github.workspace}}\*.7z'
+          path: '${{github.workspace}}\llvm-16.0.6-windows-x64-msvc19.7z'
