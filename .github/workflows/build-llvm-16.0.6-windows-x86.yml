@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   build-16-0-6:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
       - uses: microsoft/setup-msbuild@v1.1
@@ -14,12 +14,6 @@ jobs:
           regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\msdia140.dll"
           regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\amd64\msdia140.dll"
           pip install psutil
-      # - name: Cache version
-      #   id: cache-llvm
-      #   uses: actions/cache@v3.3.2
-      #   with:
-      #     path: C:\llvm
-      #     key: ${{ runner.os }}-llvm
       - name: checkout llvm
         run: git clone --single-branch --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project llvm
         # if: steps.cache-llvm.outputs.cache-hit != 'true'
