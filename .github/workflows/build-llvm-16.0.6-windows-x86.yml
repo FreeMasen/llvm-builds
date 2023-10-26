@@ -40,7 +40,7 @@ jobs:
             7z a -mx9 "LLVM-16.0.6-win64.7z" ".\install\*"
       
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3
         with:
           name: LLVM-${{ env.llvm_version }}-win64
           path: LLVM-${{ env.llvm_version }}-win64.7z
