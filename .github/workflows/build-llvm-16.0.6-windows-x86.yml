@@ -21,20 +21,28 @@ jobs:
       #     path: C:\llvm
       #     key: ${{ runner.os }}-llvm
       - name: checkout llvm
-        run: git clone --single-branch --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project C:\llvm
+        run: git clone --single-branch --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project llvm
         # if: steps.cache-llvm.outputs.cache-hit != 'true'
           
       - name: setup build
         run: |
-          $path = "C:\llvm\build"
-          If(!(test-path -PathType container $path))
-          {
-                New-Item -ItemType Directory -Path $path
-          }
-          cd $path
-          git checkout llvmorg-16.0.6
-          cmake -G "Visual Studio 17 2022" -B . -S ..\llvm -DCMAKE_INSTALL_PREFIX="C:\llvm16-0-6" -DCMAKE_BUILD_TYPE="Release" -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS=clang -DLLVM_INCLUDE_TESTS=Off -DLLVM_INCLUDE_EXAMPLES=Off -DLLVM_OPTIMIZED_TABLEGEN=On -Thost=x64
-          cmake --build $path --target INSTALL --config Release
-      - uses: actions/upload-artifact@v3
+					mkdir build
+        	mkdir install
+        	cmake `
+          	-S ".\llvm\llvm" `
+          	-B ".\build" `
+          	-G "Visual Studio 17 2022" `
+          	-Thost=x64 `
+          	-A x64 `
+          	-DLLVM_ENABLE_PROJECTS="lld;clang" `
+          	-DCMAKE_BUILD_TYPE=Release `
+          	-DCMAKE_INSTALL_PREFIX=".\install"
+        	7z a -mx9 "LLVM-16.0.6-win64.7z" ".\install\*"
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2.2.4
         with:
-          path: 'C:\llvm16-0-6'
+          name: LLVM-${{ env.llvm_version }}-win64
+          path: LLVM-${{ env.llvm_version }}-win64.7z
+
+
