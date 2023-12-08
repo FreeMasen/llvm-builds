@@ -2,7 +2,7 @@ name: build-llvm-17.0.6-linux-x86
 on:
   workflow_dispatch:
 jobs:
-  build-16-0-6:
+  build-17-0-6:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
