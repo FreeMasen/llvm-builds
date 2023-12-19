@@ -1,4 +1,4 @@
-name: build-llvm-18.0.8-pre-linux-x86
+name: build-llvm-18.0.0-pre-linux-x86
 on:
   workflow_dispatch:
 jobs:
