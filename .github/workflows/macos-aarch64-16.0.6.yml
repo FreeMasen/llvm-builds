@@ -15,7 +15,7 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
             && cd $GITHUB_WORKSPACE/llvm-project/build \
-            && git checkout llvmorg-17.0.6 \
+            && git checkout llvmorg-16.0.6 \
             && cmake -G "Ninja" -S ../llvm \
               -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm16-0-6" \
               -DCMAKE_BUILD_TYPE="Release" \
