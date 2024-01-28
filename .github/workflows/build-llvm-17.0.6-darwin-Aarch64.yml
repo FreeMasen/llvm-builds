@@ -19,9 +19,9 @@ jobs:
             && cmake -G "Ninja" -S ../llvm \
               -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm17-0-6" \
               -DCMAKE_BUILD_TYPE="Release" \
-              -DLLVM_TARGETS_TO_BUILD="AArch64" \
+              -DLLVM_TARGETS_TO_BUILD="AArch64;x86" \
               -DLLVM_ENABLE_ASSERTIONS=ON \
-              -DLLVM_ENABLE_PROJECTS="clang;" \
+              -DLLVM_ENABLE_PROJECTS="clang;lld" \
               -DLLVM_INCLUDE_TESTS=Off \
               -DLLVM_INCLUDE_EXAMPLES=Off \
               -DLLVM_OPTIMIZED_TABLEGEN=On \
@@ -37,3 +37,11 @@ jobs:
         with:
           name: clang+llvm-17.0.6-aarch64-apple-darwin
           path: ${{ github.workspace }}/**/*.tar.xz
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        if: ${{ !github.event.pull_request }}
+        with:
+          allowUpdates: true
+          tag: v17.0.6
+          name: 17.0.6
+          artifacts: clang+llvm-17.0.6-aarch64-apple-darwin.tar.xz
