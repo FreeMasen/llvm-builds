@@ -1,4 +1,6 @@
 name: build-llvm-17.0.6-darwin-aarch64
+permissions:
+  contents: write
 on:
   workflow_dispatch:
     branches: [ main ]
