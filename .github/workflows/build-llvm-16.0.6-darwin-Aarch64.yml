@@ -1,25 +1,25 @@
-name: build-llvm-17.0.6-darwin-aarch64
+name: build-llvm-16.0.6-darwin-aarch64
 permissions:
   contents: write
 on:
   workflow_dispatch:
     branches: [ main ]
 jobs:
-  build-17-0-6-macos:
+  build-16-0-6-macos:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: setup build deps
         run: brew install ninja
       - name: checkout llvm
-        run: git clone --single-branch --depth 1 --branch llvmorg-17.0.6 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
+        run: git clone --single-branch --depth 1 --branch llvmorg-16.0.6 https://github.com/llvm/llvm-project $GITHUB_WORKSPACE/llvm-project
       - name: setup build
         run: |
           mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
             && cd $GITHUB_WORKSPACE/llvm-project/build \
-            && git checkout llvmorg-17.0.6 \
+            && git checkout llvmorg-16.0.6 \
             && cmake -G "Ninja" -S ../llvm \
-              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm17-0-6" \
+              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm16-0-6" \
               -DCMAKE_BUILD_TYPE="Release" \
               -DLLVM_TARGETS_TO_BUILD="AArch64" \
               -DLLVM_ENABLE_ASSERTIONS=ON \
@@ -30,21 +30,17 @@ jobs:
             && ninja -C . install
       - name: package results
         run: |
-          pushd $GITHUB_WORKSPACE/llvm17-0-6 \
-            && tar -cJf $GITHUB_WORKSPACE/clang+llvm-17.0.6-aarch64-apple-darwin.tar.xz \
+          pushd $GITHUB_WORKSPACE/llvm16-0-6 \
+            && tar -cJf $GITHUB_WORKSPACE/clang+llvm-16.0.6-aarch64-apple-darwin.tar.xz \
                . \
             && ls $GITHUB_WORKSPACE \
             && popd
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: clang+llvm-17.0.6-aarch64-apple-darwin
-      #     path: ${{ github.workspace }}/**/*.tar.xz
       - name: Upload Release
         uses: ncipollo/release-action@v1
         if: ${{ !github.event.pull_request }}
         with:
           allowUpdates: true
-          tag: v17.0.6
-          name: 17.0.6
+          tag: v16.0.6
+          name: 16.0.6
           makeLatest: false
-          artifacts: clang+llvm-17.0.6-aarch64-apple-darwin.tar.xz
+          artifacts: clang+llvm-16.0.6-aarch64-apple-darwin.tar.xz
