@@ -27,6 +27,8 @@ jobs:
               -DLLVM_INCLUDE_TESTS=Off \
               -DLLVM_INCLUDE_EXAMPLES=Off \
               -DLLVM_OPTIMIZED_TABLEGEN=On \
+              -DLLVM_ENABLE_ZLIB=OFF \
+              -DLLVM_ENABLE_ZSTD=OFF \
             && ninja -C . install
       - name: package results
         run: |
