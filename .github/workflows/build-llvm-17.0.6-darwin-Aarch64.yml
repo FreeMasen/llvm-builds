@@ -3,6 +3,7 @@ permissions:
   contents: write
 on:
   workflow_dispatch:
+  push:
     branches: [ main ]
 jobs:
   build-17-0-6-macos:
@@ -35,10 +36,6 @@ jobs:
                . \
             && ls $GITHUB_WORKSPACE \
             && popd
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: clang+llvm-17.0.6-aarch64-apple-darwin
-      #     path: ${{ github.workspace }}/**/*.tar.xz
       - name: Upload Release
         uses: ncipollo/release-action@v1
         if: ${{ !github.event.pull_request }}
