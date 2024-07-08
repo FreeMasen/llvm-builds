@@ -1,6 +1,8 @@
 name: build-llvm-16.0.6-windows-x86
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 jobs:
   build-16-0-6:
     runs-on: windows-2019

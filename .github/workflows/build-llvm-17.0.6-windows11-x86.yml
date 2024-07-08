@@ -1,6 +1,8 @@
 name: build-llvm-17.0.6-windows11-x86
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 jobs:
   build-17-0-6:
     runs-on: windows-2022
