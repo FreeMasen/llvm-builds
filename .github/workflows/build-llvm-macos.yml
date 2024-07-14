@@ -48,10 +48,12 @@ jobs:
       - name: checkout llvm
         run: |
           curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip \
-             -o ./llvm.zip
+             -o ./llvm.zip \
           && mkdir ./llvm \
           && cd ./llvm \
-          && unzip ../llvm.zip
+          && unzip ../llvm.zip \
+          && ls
+
       # - name: setup & build
       #   run: |
       #     mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
