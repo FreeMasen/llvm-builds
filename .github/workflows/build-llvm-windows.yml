@@ -43,7 +43,7 @@ jobs:
           New-Item -Path "${{ github.workspace }}" -Name "llvm" -ItemType Directory
           New-Item -Path "${{ github.workspace }}" -Name "llvm-tmp" -ItemType Directory
           & 7z.exe x llvm.zip -o".\llvm-tmp" -y
-          Get-ChildItem -Path ".\llvm-tmp\*\"" -Recurse | Move-Item -Destination ".\llvm"
+          Get-ChildItem -Path ".\llvm-tmp\*\" -Recurse | Move-Item -Destination ".\llvm"
           Get-ChildItem -Path ".\llvm-tmp"
           Get-ChildItem -Path ".\llvm"
       - name: setup & build
