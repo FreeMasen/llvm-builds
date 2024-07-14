@@ -50,7 +50,7 @@ jobs:
           curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.tar.gz \
              -o ./llvm.tar.gz \
           && mkdir ./llvm \
-          && tar -xf ./llvm.tar.gz --strip-components 1 ./llvm \
+          && tar -xf ./llvm.tar.gz --strip-components 1 -C ./llvm \
           && ls ./llvm
 
       # - name: setup & build
