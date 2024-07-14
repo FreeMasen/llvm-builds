@@ -1,6 +1,19 @@
 name: build-windows
 on:
   workflow_dispatch:
+    inputs:
+      llvm-version:
+        description: ""
+        required: true
+        type: string
+      windows-version:
+        description: ""
+        required: true
+        type: string
+      vs-version:
+        description: ""
+        required: true
+        type: string
   workflow_call:
     inputs:
       llvm-version:
@@ -14,7 +27,7 @@ on:
         type: string
 jobs:
   build:
-    runs-on: inputs.windows-version
+    runs-on: ${{inputs.windows-version}}
     steps:
       - uses: actions/checkout@v3
       - name: setup build deps
@@ -24,8 +37,11 @@ jobs:
           regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\msdia140.dll"
           regsvr32 "%VSINSTALLDIR%\DIA SDK\bin\amd64\msdia140.dll"
           pip install psutil
-      - name: checkout llvm
-        run: git clone --single-branch --depth 1 --branch llvmorg-${{ inputs.llvm-version }} https://github.com/llvm/llvm-project llvm
+      - name: fetch llvm
+        run: |
+          Invoke-WebRequest -Uri https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip -OutFile ./llvm.zip
+          New-Item -Path "${{ github.workspace }}" -Name "llvm" -ItemType Directory
+          & 7z.exe x -o llvm -y
       - name: setup & build
         run: |
             mkdir build
