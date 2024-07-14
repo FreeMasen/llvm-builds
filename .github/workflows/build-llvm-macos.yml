@@ -5,7 +5,7 @@ on:
       tag-name:
         required: false
         type: string
-        description: The tag to upload releases to defaults to v${{ inputs.llvm-version }}
+        description: The tag to upload releases to defaults to v<inputs.llvm-version>
       llvm-version:
         required: true
         type: string
