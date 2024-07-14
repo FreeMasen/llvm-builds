@@ -47,12 +47,11 @@ jobs:
         run: brew install ninja
       - name: checkout llvm
         run: |
-          curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip \
-             -o ./llvm.zip \
+          curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.tar.gz \
+             -o ./llvm.tar.gz \
           && mkdir ./llvm \
-          && cd ./llvm \
-          && unzip ../llvm.zip \
-          && ls
+          && tar -xf ./llvm.tar.gz --strip-components 1 ./llvm \
+          && ls ./llvm
 
       # - name: setup & build
       #   run: |
