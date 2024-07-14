@@ -41,7 +41,7 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip -OutFile ./llvm.zip
           New-Item -Path "${{ github.workspace }}" -Name "llvm" -ItemType Directory
-          & 7z.exe x -o llvm -y
+          & 7z.exe x llvm.zip -o"llvm" -y
       - name: setup & build
         run: |
             mkdir build
