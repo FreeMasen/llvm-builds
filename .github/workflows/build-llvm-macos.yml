@@ -48,19 +48,19 @@ jobs:
       - name: checkout llvm
         run: git clone --single-branch --depth 1 --branch llvmorg-${{ inputs.llvm-version }} https://github.com/llvm/llvm-project llvm
       - name: setup & build
-        run: >
-          mkdir -p $GITHUB_WORKSPACE/llvm-project/build
-            && cd $GITHUB_WORKSPACE/llvm-project/build
-            && git checkout llvmorg-${{ inputs.llvm-version }}
-            && cmake -G "Ninja" -S ../llvm
-              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }}"
-              -DCMAKE_BUILD_TYPE="Release"
-              -DLLVM_TARGETS_TO_BUILD="${{ inputs.arch }}"
-              -DLLVM_ENABLE_ASSERTIONS=ON
-              -DLLVM_ENABLE_PROJECTS="clang;lld"
-              -DLLVM_INCLUDE_TESTS=Off
-              -DLLVM_INCLUDE_EXAMPLES=Off
-              -DLLVM_OPTIMIZED_TABLEGEN=On
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
+            && cd $GITHUB_WORKSPACE/llvm-project/build \
+            && git checkout llvmorg-${{ inputs.llvm-version }} \
+            && cmake -G "Ninja" -S ../llvm \
+              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }}" \
+              -DCMAKE_BUILD_TYPE="Release" \
+              -DLLVM_TARGETS_TO_BUILD="${{ inputs.arch }}" \
+              -DLLVM_ENABLE_ASSERTIONS=ON \
+              -DLLVM_ENABLE_PROJECTS="clang;lld" \
+              -DLLVM_INCLUDE_TESTS=Off \
+              -DLLVM_INCLUDE_EXAMPLES=Off \
+              -DLLVM_OPTIMIZED_TABLEGEN=On \
             && ninja -C . install
       - name: package results
         run: >-
