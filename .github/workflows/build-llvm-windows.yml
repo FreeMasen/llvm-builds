@@ -44,7 +44,7 @@ jobs:
           & 7z.exe x llvm.zip -o"llvm-tmp" -y
           Get-ChildItem -Path "llvm-tmp\*\"" -Recurse | Move-Item -Destination "llvm"
           Get-ChildItem -Force -Path "llvm-tmp"
-          Get-ChildItem -Force -Path "llvm-"
+          Get-ChildItem -Force -Path "llvm"
       - name: setup & build
         run: |
             New-Item -Path "${{ github.workspace }}" -Name "build" -ItemType Directory
