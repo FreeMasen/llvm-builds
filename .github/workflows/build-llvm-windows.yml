@@ -41,11 +41,13 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip -OutFile ./llvm.zip
           New-Item -Path "${{ github.workspace }}" -Name "llvm" -ItemType Directory
-          & 7z.exe x llvm.zip -o"llvm" -y
+          & 7z.exe x llvm.zip -o"llvm-tmp" -y
+          Get-ChildItem -Force -Path "llvm-tmp"
+          
       - name: setup & build
         run: |
-            mkdir build
-            mkdir install
+            New-Item -Path "${{ github.workspace }}" -Name "build" -ItemType Directory
+            New-Item -Path "${{ github.workspace }}" -Name "install" -ItemType Directory
             cmake `
               -S ".\llvm\llvm" `
               -B ".\build" `
