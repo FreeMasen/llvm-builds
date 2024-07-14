@@ -10,6 +10,6 @@ jobs:
     uses: ./.github/workflows/build-llvm-macos.yml
     with:
       macos-version: macos-latest
-      arch: Aarch64
+      arch: AArch64
       arch-triple: aarch64
       llvm-version: 16.0.6
