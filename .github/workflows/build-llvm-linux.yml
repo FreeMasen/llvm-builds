@@ -14,6 +14,10 @@ on:
         required: true
         type: string
         description: ""
+      arch-triple:
+        required: true
+        type: string
+        description: ""
   workflow_call:
     inputs:
       llvm-version:
@@ -23,6 +27,9 @@ on:
         required: true
         type: string
       arch:
+        required: true
+        type: string
+      arch-triple:
         required: true
         type: string
 jobs:
@@ -41,15 +48,19 @@ jobs:
             build-essential
             make
             cmake
-      - name: checkout llvm
-        run: git clone --single-branch --depth 1 --branch llvmorg-${{ inputs.llvm-version }} https://github.com/llvm/llvm-project llvm
+      - name: fetch llvm
+        run: |
+          curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.tar.gz \
+             -o $GITHUB_WORKSPACE/llvm.tar.gz \
+          && mkdir $GITHUB_WORKSPACE/llvm \
+          && tar -xf $GITHUB_WORKSPACE/llvm.tar.gz --strip-components 1 -C $GITHUB_WORKSPACE/llvm \
+          && ls $GITHUB_WORKSPACE/llvm
       - name: setup build
         run: |
-          mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
-            && cd $GITHUB_WORKSPACE/llvm-project/build \
-            && git checkout llvmorg-${{ inputs.llvm-version }} \
+          mkdir -p $GITHUB_WORKSPACE/llvm/build \
+            && cd $GITHUB_WORKSPACE/llvm/build \
             && cmake -G "Ninja" -S ../llvm \
-              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm16-0-6" \
+              -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }}" \
               -DCMAKE_BUILD_TYPE="Release" \
               -DLLVM_TARGETS_TO_BUILD="X86" \
               -DLLVM_ENABLE_ASSERTIONS=ON \
@@ -60,7 +71,7 @@ jobs:
             && ninja -C . install
       - name: package results
         run: |
-          pushd $GITHUB_WORKSPACE/llvm16-0-6 \
+          pushd $GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }} \
             && tar -cJf $GITHUB_WORKSPACE/clang+llvm-${{ inputs.llvm-version }}-x86_64-linux.tar.xz \
                . \
             && ls $GITHUB_WORKSPACE \
@@ -73,4 +84,4 @@ jobs:
           tag: v${{ inputs.llvm-version }}
           name: ${{ inputs.llvm-version }}
           makeLatest: false
-          artifacts: clang+llvm-${{ inputs.llvm-version }}-${{ inputs.arch }}-apple-darwin.tar.xz
+          artifacts: clang+llvm-${{ inputs.llvm-version }}-${{ (inputs.arch-triple || inputs.arch) }}-linux.tar.xz
