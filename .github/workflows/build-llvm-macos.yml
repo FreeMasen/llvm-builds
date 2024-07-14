@@ -48,7 +48,7 @@ jobs:
       - name: checkout llvm
         run: git clone --single-branch --depth 1 --branch llvmorg-${{ inputs.llvm-version }} https://github.com/llvm/llvm-project llvm
       - name: setup & build
-        run: >-
+        run: >
           mkdir -p $GITHUB_WORKSPACE/llvm-project/build
             && cd $GITHUB_WORKSPACE/llvm-project/build
             && git checkout llvmorg-${{ inputs.llvm-version }}
