@@ -48,16 +48,15 @@ jobs:
       - name: checkout llvm
         run: |
           curl -L https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.tar.gz \
-             -o ./llvm.tar.gz \
-          && mkdir ./llvm \
-          && tar -xf ./llvm.tar.gz --strip-components 1 -C ./llvm \
-          && ls ./llvm
+             -o $GITHUB_WORKSPACE/llvm.tar.gz \
+          && mkdir $GITHUB_WORKSPACE/llvm \
+          && tar -xf $GITHUB_WORKSPACE/llvm.tar.gz --strip-components 1 -C $GITHUB_WORKSPACE/llvm \
+          && ls $GITHUB_WORKSPACE/llvm
 
       - name: setup & build
         run: |
-          mkdir -p $GITHUB_WORKSPACE/llvm-project/build \
-            && cd $GITHUB_WORKSPACE/llvm-project/build \
-            && git checkout llvmorg-${{ inputs.llvm-version }} \
+          mkdir -p $GITHUB_WORKSPACE/llvm/build \
+            && cd $GITHUB_WORKSPACE/llvm/build \
             && cmake -G "Ninja" -S ../llvm \
               -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }}" \
               -DCMAKE_BUILD_TYPE="Release" \
