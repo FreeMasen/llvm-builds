@@ -11,5 +11,5 @@ jobs:
     with:
       macos-version: macos-latest
       arch: Aarch64
-      llvm-version: 16.0.6
       arch-triple: aarch64
+      llvm-version: 16.0.6
