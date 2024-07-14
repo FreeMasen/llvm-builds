@@ -41,10 +41,11 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-${{ inputs.llvm-version }}.zip -OutFile ./llvm.zip
           New-Item -Path "${{ github.workspace }}" -Name "llvm" -ItemType Directory
-          & 7z.exe x llvm.zip -o"llvm-tmp" -y
-          Get-ChildItem -Path "llvm-tmp\*\"" -Recurse | Move-Item -Destination "llvm"
-          Get-ChildItem -Force -Path "llvm-tmp"
-          Get-ChildItem -Force -Path "llvm"
+          New-Item -Path "${{ github.workspace }}" -Name "llvm-tmp" -ItemType Directory
+          & 7z.exe x llvm.zip -o".\llvm-tmp" -y
+          Get-ChildItem -Path ".\llvm-tmp\*\"" -Recurse | Move-Item -Destination ".\llvm"
+          Get-ChildItem -Path ".\llvm-tmp"
+          Get-ChildItem -Path ".\llvm"
       - name: setup & build
         run: |
             New-Item -Path "${{ github.workspace }}" -Name "build" -ItemType Directory
