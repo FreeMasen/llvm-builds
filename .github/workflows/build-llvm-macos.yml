@@ -68,12 +68,12 @@ jobs:
               -DLLVM_OPTIMIZED_TABLEGEN=On \
             && ninja -C . install
       - name: package results
-        run: >-
-          pushd $GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }}
-            && tar -cJf
-              $GITHUB_WORKSPACE/clang+llvm-${{ inputs.llvm-version }}-${{ inputs.arch }}-apple-darwin.tar.xz
-              .
-            && ls $GITHUB_WORKSPACE
+        run: |
+          pushd $GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }} \
+            && tar -cJf \
+              $GITHUB_WORKSPACE/clang+llvm-${{ inputs.llvm-version }}-${{ inputs.arch }}-apple-darwin.tar.xz \
+              . \
+            && ls $GITHUB_WORKSPACE \
             && popd
       - name: Upload Release
         uses: ncipollo/release-action@v1
