@@ -43,6 +43,8 @@ on:
 jobs:
   build:
     runs-on: ${{ inputs.macos-version }}
+    env:
+      archive_name: clang+llvm-${{ inputs.llvm-version }}-${{ (inputs.arch-triple || inputs.arch) }}-apple-darwin.tar.xz
     steps:
       - uses: actions/checkout@v3
       - name: setup build deps
@@ -73,7 +75,7 @@ jobs:
         run: |
           pushd $GITHUB_WORKSPACE/llvm${{ inputs.llvm-version }} \
             && tar -cJf \
-              $GITHUB_WORKSPACE/clang+llvm-${{ inputs.llvm-version }}-${{ inputs.arch }}-apple-darwin.tar.xz \
+              $GITHUB_WORKSPACE/${{ env.archive_name }} \
               . \
             && ls $GITHUB_WORKSPACE \
             && popd
