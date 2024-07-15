@@ -82,7 +82,7 @@ jobs:
         if: ${{ !github.event.pull_request }}
         with:
           allowUpdates: true
-          tag: ${{ (inputs.tag-name || 'v' + inputs.llvm-version) }}
+          tag: ${{ (inputs.tag-name ?? '' || 'v') }}${{ (inputs.tag-name || inputs.llvm-version) }}
           name: ${{ (inputs.tag-name || inputs.llvm-version) }}
           makeLatest: false
           artifacts: clang+llvm-${{ inputs.llvm-version }}-${{ (inputs.arch-triple || inputs.arch) }}-apple-darwin.tar.xz
