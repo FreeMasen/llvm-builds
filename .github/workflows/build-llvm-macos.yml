@@ -70,6 +70,7 @@ jobs:
               -DLLVM_INCLUDE_TESTS=Off \
               -DLLVM_INCLUDE_EXAMPLES=Off \
               -DLLVM_OPTIMIZED_TABLEGEN=On \
+              -DLLVM_PREFER_STATIC_ZSTD=TRUE \
             && ninja -C . install
       - name: package results
         run: |
